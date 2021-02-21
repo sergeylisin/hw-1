@@ -1,3 +1,5 @@
+import time
+
 """
 
 Домашнее задание №1
@@ -15,13 +17,28 @@
     
 """
 
-questions_and_answers = {}
+def get_time(str):
+  return time.ctime()
+
+questions_and_answers = {
+  "что делаешь?":"вычисляю",
+  "давно?":"всегда",
+  "сколько времени":get_time
+}
 
 def ask_user(answers_dict):
     """
     Замените pass на ваш код
     """
-    pass
+    while True:
+      question = input()
+      answer = questions_and_answers.get(question)
+      if answer is None:
+        print("Странный вопрос...")
+      elif type(answer).__name__ == "function":
+        print(answer(question))
+      else:
+        print(answer)
     
 if __name__ == "__main__":
     ask_user(questions_and_answers)
