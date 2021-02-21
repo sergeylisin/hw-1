@@ -13,7 +13,7 @@
 
 """
 import logging
-from ephem import Mercury,Venus, Mars, Moon, Saturn,Neptune,Uranus,constellation
+from ephem import Mercury, Venus, Mars, Moon, Saturn, Neptune, Uranus, constellation
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
@@ -30,10 +30,12 @@ PROXY = {
     }
 }
 
-API_KEY='1521578217:AAEnXxtMOFj1Y_1IhHAjVQBR5sRtRxVpC2w'
+API_KEY = '1521578217:AAEnXxtMOFj1Y_1IhHAjVQBR5sRtRxVpC2w'
 
-planet_types = [Mercury,Venus, Mars, Moon, Saturn,Neptune,Uranus]
-planets = dict(map(lambda x: (x.__name__,x), planet_types))
+PLANETS_NAME_OBJ_MAP = {'Mercury': Mercury, 'Venus': Venus, 'Mars': Mars,
+                        'Moon': Moon, 'Saturn': Saturn, 'Neptune': Neptune, 'Uranus': Uranus}
+#planets = dict(map(lambda x: (x.__name__,x), planet_types))
+
 
 def greet_user(update, context):
     text = 'Вызван /start'
@@ -46,18 +48,17 @@ def talk_to_me(update, context):
     print(user_text)
     update.message.reply_text(text)
 
-def planet(update,context):
-  txt = update.message.text
-  planet = txt.split()[1]
-  try:
-    p = planets[planet]()
-    p.compute()
-    cns = constellation(p)[1]
-    update.message.reply_text(cns)
-  except KeyError:
-    update.message.reply_text("unknown planet")
 
-    
+def planet(update, context):
+    txt = update.message.text
+    planet_name = txt.split()[1]
+    try:
+        p = PLANETS_NAME_OBJ_MAP[planet_name]()
+        p.compute()
+        constellation_name = constellation(p)[1]
+        update.message.reply_text(constellation_name)
+    except KeyError:
+        update.message.reply_text("unknown planet")
 
 
 def main():
